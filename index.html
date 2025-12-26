@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>👾</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Dancing+Script&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --accent:#ff4d6d;
+  --paper:rgba(255,255,255,0.95);
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+
+body{
+  height:100vh;
+  overflow:hidden;
+  font-family:'Playfair Display',serif;
+  background:#0b0010;
+}
+
+/* Background animated gradient */
+.bg{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(45deg,#ff4d6d,#ffd166,#4d96ff,#ff4d6d);
+  background-size:400% 400%;
+  animation:bgAnim 20s ease infinite;
+  z-index:0;
+}
+@keyframes bgAnim{
+  0%{background-position:0% 50%;}
+  50%{background-position:100% 50%;}
+  100%{background-position:0% 50%;}
+}
+
+/* Stars */
+.star{
+  position:fixed;
+  border-radius:50%;
+  background:white;
+  opacity:0.8;
+  animation:twinkle linear infinite;
+}
+@keyframes twinkle{
+  0%{opacity:0.2;}
+  50%{opacity:1;}
+  100%{opacity:0.2;}
+}
+
+/* Petals */
+.petal{
+  position:fixed;
+  font-size:20px;
+  animation:fall linear infinite;
+}
+@keyframes fall{
+  to{transform:translateY(110vh) rotate(360deg);}
+}
+
+/* Password screen */
+#lockScreen{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,0.95);
+  z-index:10;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  color:white;
+  text-align:center;
+  font-family:'Playfair Display', serif;
+}
+#lockScreen input{
+  padding:12px;
+  font-size:16px;
+  border-radius:6px;
+  border:none;
+  margin-top:10px;
+}
+#lockScreen button{
+  margin-top:10px;
+  padding:10px 20px;
+  font-size:16px;
+  border:none;
+  border-radius:6px;
+  background:var(--accent);
+  color:white;
+  cursor:pointer;
+}
+
+/* Stage and card */
+.stage{
+  position:relative;
+  z-index:5;
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  perspective:1200px;
+  display:none; /* hidden until password correct */
+}
+.card{
+  width:700px;
+  max-width:90%;
+  padding:50px;
+  background:rgba(255,255,255,0.1);
+  backdrop-filter:blur(25px);
+  border-radius:30px;
+  box-shadow:0 50px 120px rgba(0,0,0,0.8);
+  position:relative;
+  transform-style:preserve-3d;
+  transition:transform 0.1s;
+}
+.card::before{
+  content:"";
+  position:absolute;
+  inset:-4px;
+  border-radius:34px;
+  background:linear-gradient(45deg,#ff4d6d,#ffd166,#4d96ff,#ff4d6d);
+  filter:blur(18px);
+  z-index:-1;
+  animation:hue 6s linear infinite;
+}
+@keyframes hue{
+  to{filter:hue-rotate(360deg) blur(18px);}
+}
+
+/* Paper */
+.paper{
+  background:var(--paper);
+  color:#222;
+  padding:40px;
+  border-radius:20px;
+  position:relative;
+}
+.paper::before,
+.paper::after{
+  content:"❦";
+  position:absolute;
+  font-size:22px;
+  color:var(--accent);
+}
+.paper::before{top:10px;left:15px;}
+.paper::after{bottom:10px;right:15px;}
+
+h1{text-align:center;letter-spacing:6px;}
+.heart{text-align:center;color:var(--accent);font-size:36px;animation:beat 1.2s infinite;}
+@keyframes beat{50%{transform:scale(1.4);}}
+
+.divider{height:2px;width:70%;margin:22px auto;background:linear-gradient(to right,transparent,var(--accent),transparent);}
+#text{line-height:2;white-space:pre-wrap;min-height:220px;}
+.progress{height:4px;background:#eee;margin:15px 0;border-radius:2px;overflow:hidden;}
+.progress span{display:block;height:100%;width:0%;background:var(--accent);transition:.2s;}
+.fire{position:fixed;font-size:16px;animation:pop 1.2s forwards;}
+@keyframes pop{to{transform:translateY(-120px) scale(0);opacity:0;}}
+.sparkle{position:fixed;pointer-events:none;animation:sparkle 0.8s forwards;}
+@keyframes sparkle{to{transform:scale(0);opacity:0;}}
+.clock{position:fixed;bottom:20px;left:20px;color:#fff;opacity:.6;font-size:14px;}
+</style>
+</head>
+
+<body>
+<div class="bg"></div>
+
+<div id="lockScreen">
+  <h2>Enter Password to Open </h2>
+  <input type="password" id="pw" placeholder="Password"/>
+  <button onclick="unlock()">Open</button>
+  <p style="margin-top:10px;font-size:14px;">Hint: try "1234"</p>
+</div>
+
+<div class="stage" id="stage">
+  <div class="card" id="card">
+    <div class="paper">
+      <div class="heart">👾</div>
+      <div class="divider"></div>
+      <div class="progress"><span id="bar"></span></div>
+      <div id="text"></div>
+      <div class="divider"></div>
+      <div style="text-align:right;font-family:'Dancing Script',cursive;font-size:28px;">
+        👾
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="clock" id="clock"></div>
+
+<script>
+const correctPassword = "1234";
+
+/* Unlock letter */
+function unlock(){
+  const pw=document.getElementById("pw").value;
+  if(pw===correctPassword){
+    document.getElementById("lockScreen").style.display="none";
+    document.getElementById("stage").style.display="flex";
+  }else{
+    alert("Wrong password! Try again.");
+  }
+}
+
+/* Stars */
+for(let i=0;i<100;i++){
+  let s=document.createElement("div");
+  s.className="star";
+  let size=Math.random()*2+1;
+  s.style.width=s.style.height=size+"px";
+  s.style.left=Math.random()*100+"vw";
+  s.style.top=Math.random()*100+"vh";
+  s.style.animationDuration=1+Math.random()*3+"s";
+  document.body.appendChild(s);
+}
+
+/* Petals */
+for(let i=0;i<30;i++){
+  let p=document.createElement("div");
+  p.className="petal";
+  p.innerHTML="🌸";
+  p.style.left=Math.random()*100+"vw";
+  p.style.animationDuration=5+Math.random()*5+"s";
+  document.body.appendChild(p);
+}
+
+/* Cursor sparkles */
+document.addEventListener("mousemove",e=>{
+  let sp=document.createElement("div");
+  sp.className="sparkle";
+  sp.innerHTML="✨";
+  sp.style.left=e.pageX+"px";
+  sp.style.top=e.pageY+"px";
+  document.body.appendChild(sp);
+  setTimeout(()=>sp.remove(),800);
+});
+
+/* Clock */
+setInterval(()=>{
+  const d=new Date();
+  clock.innerHTML=d.toLocaleString();
+},1000);
+
+/* Typing effect + progress bar */
+const msg=`Kaya lang naman ako umalis ay dahil ayaw kitang makita na nahihirapan,
+lalo na kung ako mismo ang dahilan. Mas pinili kong masaktan kaysa
+makita kang nasasaktan.
+
+Hindi ko kailanman ginusto na maging dahilan ng bigat o sakit sa puso mo.
+Kung nasaktan kita, taos-puso akong humihingi ng paumanhin.`;
+
+let i=0;
+(function type(){
+  if(i<msg.length){
+    text.innerHTML+=msg[i++];
+    bar.style.width=(i/msg.length*100)+"%";
+    document.body.style.filter=`hue-rotate(${i/5}deg)`; // mood shift
+    setTimeout(type,30);
+  }else fireworks();
+})();
+
+/* Fireworks */
+function fireworks(){
+  for(let i=0;i<40;i++){
+    let f=document.createElement("div");
+    f.className="fire";
+    f.innerHTML="✦";
+    f.style.left=Math.random()*100+"vw";
+    f.style.top="70vh";
+    f.style.color=["#ff4d6d","#ffd166","#4d96ff"][Math.floor(Math.random()*3)];
+    document.body.appendChild(f);
+    setTimeout(()=>f.remove(),1200);
+  }
+}
+
+/* 3D tilt */
+document.addEventListener("mousemove",e=>{
+  const x=(window.innerWidth/2-e.clientX)/20;
+  const y=(window.innerHeight/2-e.clientY)/20;
+  card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`;
+});
+</script>
+</body>
+</html>
