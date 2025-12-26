@@ -208,7 +208,7 @@ h1 {
         <h2>Enter Password</h2>
         <input type="password" id="pw">
         <button onclick="unlock()">Open</button>
-        <p style="font-size:12px;">Hint: favorite song ko</p>
+        <p style="font-size:12px;">Hint: 1234 </p>
     </div>
 </div>
 
@@ -236,7 +236,7 @@ h1 {
 <script>
 /* PASSWORD */
 function unlock() {
-    if (document.getElementById("pw").value === "flaming hot cheetos") {
+    if (document.getElementById("pw").value === "1234") {
         document.getElementById("lock").style.display = "none";
         document.getElementById("bgm").play();
     }
@@ -270,13 +270,7 @@ function openLetter() {
 }
 
 /* TYPING */
-const msg = `Kaya lang naman ako umalis ay dahil ayaw kitang makita na nahihirapan,
-lalo na kung ako mismo ang dahilan. Mas pinili kong masaktan kaysa
-makita kang nasasaktan.
-
-Hindi ko kailanman ginusto na maging dahilan ng bigat o sakit sa puso mo.
-Lahat ng ito ay ginawa ko dahil mahalaga ka sa akin.
-Kung nasaktan kita, taos-puso akong humihingi ng paumanhin.`;
+const msg ="hatdog"
 
 let i = 0;
 function type() {
@@ -302,6 +296,7 @@ document.addEventListener("mousemove", e => {
 
 </body>
 </html>
+
 
 
 
