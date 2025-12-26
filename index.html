@@ -7,281 +7,300 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Dancing+Script&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --accent:#ff4d6d;
-  --paper:rgba(255,255,255,0.95);
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #12050c, #000);
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Playfair Display', serif;
+    color: white;
 }
 
-*{box-sizing:border-box;margin:0;padding:0;}
-
-body{
-  height:100vh;
-  overflow:hidden;
-  font-family:'Playfair Display',serif;
-  background:#0b0010;
+/* INTRO */
+#intro {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 40px;
+    letter-spacing: 6px;
+    z-index: 100;
+    animation: fadeOut 3s forwards 2s;
+}
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
 }
 
-/* Background animated gradient */
-.bg{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(45deg,#ff4d6d,#ffd166,#4d96ff,#ff4d6d);
-  background-size:400% 400%;
-  animation:bgAnim 20s ease infinite;
-  z-index:0;
+/* PASSWORD */
+#lock {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 90;
 }
-@keyframes bgAnim{
-  0%{background-position:0% 50%;}
-  50%{background-position:100% 50%;}
-  100%{background-position:0% 50%;}
+.lock-box {
+    text-align: center;
 }
-
-/* Stars */
-.star{
-  position:fixed;
-  border-radius:50%;
-  background:white;
-  opacity:0.8;
-  animation:twinkle linear infinite;
+.lock-box input {
+    padding: 10px;
+    font-size: 16px;
 }
-@keyframes twinkle{
-  0%{opacity:0.2;}
-  50%{opacity:1;}
-  100%{opacity:0.2;}
+.lock-box button {
+    padding: 10px 20px;
+    margin-left: 10px;
 }
 
-/* Petals */
-.petal{
-  position:fixed;
-  font-size:20px;
-  animation:fall linear infinite;
+/* STARS */
+.star {
+    position: fixed;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle infinite alternate;
 }
-@keyframes fall{
-  to{transform:translateY(110vh) rotate(360deg);}
-}
-
-/* Password screen */
-#lockScreen{
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,0.95);
-  z-index:10;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  flex-direction:column;
-  color:white;
-  text-align:center;
-  font-family:'Playfair Display', serif;
-}
-#lockScreen input{
-  padding:12px;
-  font-size:16px;
-  border-radius:6px;
-  border:none;
-  margin-top:10px;
-}
-#lockScreen button{
-  margin-top:10px;
-  padding:10px 20px;
-  font-size:16px;
-  border:none;
-  border-radius:6px;
-  background:var(--accent);
-  color:white;
-  cursor:pointer;
+@keyframes twinkle {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
 }
 
-/* Stage and card */
-.stage{
-  position:relative;
-  z-index:5;
-  height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  perspective:1200px;
-  display:none; /* hidden until password correct */
-}
-.card{
-  width:700px;
-  max-width:90%;
-  padding:50px;
-  background:rgba(255,255,255,0.1);
-  backdrop-filter:blur(25px);
-  border-radius:30px;
-  box-shadow:0 50px 120px rgba(0,0,0,0.8);
-  position:relative;
-  transform-style:preserve-3d;
-  transition:transform 0.1s;
-}
-.card::before{
-  content:"";
-  position:absolute;
-  inset:-4px;
-  border-radius:34px;
-  background:linear-gradient(45deg,#ff4d6d,#ffd166,#4d96ff,#ff4d6d);
-  filter:blur(18px);
-  z-index:-1;
-  animation:hue 6s linear infinite;
-}
-@keyframes hue{
-  to{filter:hue-rotate(360deg) blur(18px);}
+/* ENVELOPE */
+.envelope {
+    width: 380px;
+    height: 240px;
+    background: #8b2f4f;
+    border-radius: 0 0 15px 15px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.7);
 }
 
-/* Paper */
-.paper{
-  background:var(--paper);
-  color:#222;
-  padding:40px;
-  border-radius:20px;
-  position:relative;
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    width: 100%;
+    height: 120px;
+    background: #a83c63;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    transform-origin: top;
+    transition: 1s;
 }
-.paper::before,
-.paper::after{
-  content:"❦";
-  position:absolute;
-  font-size:22px;
-  color:var(--accent);
+
+.envelope.open::before {
+    transform: rotateX(180deg);
 }
-.paper::before{top:10px;left:15px;}
-.paper::after{bottom:10px;right:15px;}
 
-h1{text-align:center;letter-spacing:6px;}
-.heart{text-align:center;color:var(--accent);font-size:36px;animation:beat 1.2s infinite;}
-@keyframes beat{50%{transform:scale(1.4);}}
+/* LETTER */
+.letter {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 360px;
+    height: 0;
+    background: rgba(255,255,255,0.95);
+    color: #222;
+    border-radius: 10px;
+    padding: 0 25px;
+    overflow: hidden;
+    transition: 1.2s ease;
+}
 
-.divider{height:2px;width:70%;margin:22px auto;background:linear-gradient(to right,transparent,var(--accent),transparent);}
-#text{line-height:2;white-space:pre-wrap;min-height:220px;}
-.progress{height:4px;background:#eee;margin:15px 0;border-radius:2px;overflow:hidden;}
-.progress span{display:block;height:100%;width:0%;background:var(--accent);transition:.2s;}
-.fire{position:fixed;font-size:16px;animation:pop 1.2s forwards;}
-@keyframes pop{to{transform:translateY(-120px) scale(0);opacity:0;}}
-.sparkle{position:fixed;pointer-events:none;animation:sparkle 0.8s forwards;}
-@keyframes sparkle{to{transform:scale(0);opacity:0;}}
-.clock{position:fixed;bottom:20px;left:20px;color:#fff;opacity:.6;font-size:14px;}
+.envelope.open .letter {
+    height: 520px;
+    padding: 30px 25px;
+}
+
+/* GLASS CARD */
+.card {
+    max-width: 650px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px);
+    border-radius: 25px;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 0 60px rgba(255,0,120,0.4);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 28px;
+    background: linear-gradient(45deg, #ff4d6d, #ffd166, #ff4d6d);
+    filter: blur(12px);
+    z-index: -1;
+    animation: neon 4s linear infinite;
+}
+@keyframes neon {
+    to { filter: hue-rotate(360deg) blur(12px); }
+}
+
+h1 {
+    text-align: center;
+    letter-spacing: 4px;
+}
+
+.heart {
+    text-align: center;
+    color: #ff4d6d;
+    font-size: 32px;
+    animation: beat 1.2s infinite;
+}
+@keyframes beat {
+    50% { transform: scale(1.4); }
+}
+
+.divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, #ff4d6d, transparent);
+    margin: 20px 0;
+}
+
+/* TEXT */
+#text {
+    line-height: 1.9;
+    white-space: pre-wrap;
+}
+
+/* PETALS */
+.petal {
+    position: fixed;
+    top: -10px;
+    font-size: 20px;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* SPARKLE */
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    animation: sparkle 0.8s forwards;
+}
+@keyframes sparkle {
+    to { transform: scale(0); opacity: 0; }
+}
+
+/* CENTER */
+.center {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 </style>
 </head>
 
 <body>
-<div class="bg"></div>
 
-<div id="lockScreen">
-  <h2>Enter Password to Open </h2>
-  <input type="password" id="pw" placeholder="Password"/>
-  <button onclick="unlock()">Open</button>
-  <p style="margin-top:10px;font-size:14px;">Hint: try "araw na ng confess ka "</p>
-</div>
+<div id="intro">👾</div>
 
-<div class="stage" id="stage">
-  <div class="card" id="card">
-    <div class="paper">
-      <div class="heart">👾</div>
-      <div class="divider"></div>
-      <div class="progress"><span id="bar"></span></div>
-      <div id="text"></div>
-      <div class="divider"></div>
-      <div style="text-align:right;font-family:'Dancing Script',cursive;font-size:28px;">
-        👾
-      </div>
+<div id="lock">
+    <div class="lock-box">
+        <h2>Enter Password</h2>
+        <input type="password" id="pw">
+        <button onclick="unlock()">Open</button>
+        <p style="font-size:12px;">Hint: favorite song ko</p>
     </div>
-  </div>
 </div>
 
-<div class="clock" id="clock"></div>
+<div class="center">
+    <div class="card">
+        <div class="envelope" onclick="openLetter()">
+            <div class="letter">
+                <h1>👾</h1>
+                <div class="heart"></div>
+                <div class="divider"></div>
+                <div id="text"></div>
+                <div class="divider"></div>
+                <div style="text-align:right;font-family:'Dancing Script',cursive;font-size:24px;">
+                    👾
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<audio id="bgm" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-const correctPassword = "october 5";
-
-/* Unlock letter */
-function unlock(){
-  const pw=document.getElementById("pw").value;
-  if(pw===correctPassword){
-    document.getElementById("lockScreen").style.display="none";
-    document.getElementById("stage").style.display="flex";
-  }else{
-    alert("Wrong password! Try again.");
-  }
+/* PASSWORD */
+function unlock() {
+    if (document.getElementById("pw").value === "flaming hot cheetos") {
+        document.getElementById("lock").style.display = "none";
+        document.getElementById("bgm").play();
+    }
 }
 
-/* Stars */
-for(let i=0;i<100;i++){
-  let s=document.createElement("div");
-  s.className="star";
-  let size=Math.random()*2+1;
-  s.style.width=s.style.height=size+"px";
-  s.style.left=Math.random()*100+"vw";
-  s.style.top=Math.random()*100+"vh";
-  s.style.animationDuration=1+Math.random()*3+"s";
-  document.body.appendChild(s);
+/* STARS */
+for (let i = 0; i < 150; i++) {
+    let s = document.createElement("div");
+    s.className = "star";
+    let size = Math.random()*2+1;
+    s.style.width = s.style.height = size+"px";
+    s.style.left = Math.random()*100+"vw";
+    s.style.top = Math.random()*100+"vh";
+    s.style.animationDuration = 1+Math.random()*3+"s";
+    document.body.appendChild(s);
 }
 
-/* Petals */
-for(let i=0;i<30;i++){
-  let p=document.createElement("div");
-  p.className="petal";
-  p.innerHTML="🌸";
-  p.style.left=Math.random()*100+"vw";
-  p.style.animationDuration=5+Math.random()*5+"s";
-  document.body.appendChild(p);
+/* PETALS */
+for (let i = 0; i < 30; i++) {
+    let p = document.createElement("div");
+    p.className = "petal";
+    p.innerHTML = "🌸";
+    p.style.left = Math.random()*100+"vw";
+    p.style.animationDuration = 5+Math.random()*5+"s";
+    document.body.appendChild(p);
 }
 
-/* Cursor sparkles */
-document.addEventListener("mousemove",e=>{
-  let sp=document.createElement("div");
-  sp.className="sparkle";
-  sp.innerHTML="✨";
-  sp.style.left=e.pageX+"px";
-  sp.style.top=e.pageY+"px";
-  document.body.appendChild(sp);
-  setTimeout(()=>sp.remove(),800);
-});
+/* OPEN LETTER */
+function openLetter() {
+    document.querySelector(".envelope").classList.add("open");
+}
 
-/* Clock */
-setInterval(()=>{
-  const d=new Date();
-  clock.innerHTML=d.toLocaleString();
-},1000);
-
-/* Typing effect + progress bar */
-const msg=`Kaya lang naman ako umalis ay dahil ayaw kitang makita na nahihirapan,
+/* TYPING */
+const msg = `Kaya lang naman ako umalis ay dahil ayaw kitang makita na nahihirapan,
 lalo na kung ako mismo ang dahilan. Mas pinili kong masaktan kaysa
 makita kang nasasaktan.
 
 Hindi ko kailanman ginusto na maging dahilan ng bigat o sakit sa puso mo.
+Lahat ng ito ay ginawa ko dahil mahalaga ka sa akin.
 Kung nasaktan kita, taos-puso akong humihingi ng paumanhin.`;
 
-let i=0;
-(function type(){
-  if(i<msg.length){
-    text.innerHTML+=msg[i++];
-    bar.style.width=(i/msg.length*100)+"%";
-    document.body.style.filter=`hue-rotate(${i/5}deg)`; // mood shift
-    setTimeout(type,30);
-  }else fireworks();
-})();
-
-/* Fireworks */
-function fireworks(){
-  for(let i=0;i<40;i++){
-    let f=document.createElement("div");
-    f.className="fire";
-    f.innerHTML="✦";
-    f.style.left=Math.random()*100+"vw";
-    f.style.top="70vh";
-    f.style.color=["#ff4d6d","#ffd166","#4d96ff"][Math.floor(Math.random()*3)];
-    document.body.appendChild(f);
-    setTimeout(()=>f.remove(),1200);
-  }
+let i = 0;
+function type() {
+    if (i < msg.length) {
+        document.getElementById("text").innerHTML += msg.charAt(i);
+        i++;
+        setTimeout(type, 35);
+    }
 }
+type();
 
-/* 3D tilt */
-document.addEventListener("mousemove",e=>{
-  const x=(window.innerWidth/2-e.clientX)/20;
-  const y=(window.innerHeight/2-e.clientY)/20;
-  card.style.transform=`rotateY(${x}deg) rotateX(${y}deg)`;
+/* SPARKLE */
+document.addEventListener("mousemove", e => {
+    let sp = document.createElement("div");
+    sp.className = "sparkle";
+    sp.innerHTML = "✨";
+    sp.style.left = e.pageX+"px";
+    sp.style.top = e.pageY+"px";
+    document.body.appendChild(sp);
+    setTimeout(()=>sp.remove(),800);
 });
 </script>
+
 </body>
 </html>
+
 
