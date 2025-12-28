@@ -1,3 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>👾</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Dancing+Script&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #1a0b14, #000);
+    min-height: 100vh;
+    overflow: hidden;
+    font-family: 'Playfair Display', serif;
+    color: white;
+}
+
+/* INTRO */
+#intro {
+    position: fixed;
+    inset: 0;
+    background: black;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    z-index: 100;
+    animation: fadeOut 3s forwards 2s;
+}
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* LOCK */
+#lock {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.93);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 90;
+}
+
+.lock-box {
+    background: #14070d;
+    padding: 35px 40px;
+    border-radius: 20px;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 0 40px rgba(255,0,100,0.2);
+}
+
+.lock-box h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.lock-box input {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+.lock-box button {
+    padding: 12px 28px;
+    margin-top: 15px;
+    border-radius: 20px;
+    border: none;
+    background: #a83c63;
+    color: white;
+    cursor: pointer;
+}
+
+.lock-box p {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+/* CENTER */
+.center {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ENVELOPE */
+.envelope {
+    width: 440px;
+    height: 270px;
+    background: linear-gradient(145deg, #8b2f4f, #6e233c);
+    border-radius: 0 0 20px 20px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: -140px;
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(145deg, #a83c63, #8b2f4f);
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    transform-origin: top;
+    transition: 1s;
+}
+.envelope.open::before {
+    transform: rotateX(180deg);
+}
+
+/* LETTER */
+.letter {
+    position: absolute;
+    bottom: 12px;
+    left: 12px;
+    width: calc(100% - 24px);
+    height: 0;
+    background: #fffdf8;
+    color: #222;
+    border-radius: 14px;
+    padding: 0 40px;
+    overflow-y: auto;
+    transition: 1.2s ease;
+}
+.envelope.open .letter {
+    height: 600px;
+    padding: 40px;
+}
+
+/* LETTER TEXT */
+.letter h2 {
+    text-align: center;
+    font-size: 28px;
+    margin-bottom: 25px;
+}
+
+#text {
+    font-size: 17px;
+    line-height: 1.9;
+}
+
+#text p {
+    margin-bottom: 20px;
+}
+
+/* HEARTS */
+.heart {
+    position: fixed;
+    bottom: -10px;
+    font-size: 18px;
+    animation: floatUp 8s linear infinite;
+    opacity: 0.7;
+}
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro">👾</div>
+
+<!-- LOCK -->
+<div id="lock">
+    <div class="lock-box">
+        <h2 id="question"></h2>
+        <input type="text" id="answer" placeholder="Type your answer">
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="progress">Answered: 0 / 4</p>
+    </div>
+</div>
+
+<!-- ENVELOPE -->
+
+
+<!-- MUSIC -->
+<audio id="bgm" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let questions = [
+    { q: "Ano ang favorite song ko?", a: "flaming hot cheetos" },
+    { q: "Kelan ako nawla?", a: "march 16 2025" },
+    { q: "Kelan ka unang nagalit sakin?", a: "december 9 2024" },
+    { q: "name na lagi ko tinatawag sau?", a: "alien" }
+];
+
+let answeredCorrect = 0;
+let currentQ;
+
+function loadRandomQuestion() {
+    currentQ = questions[Math.floor(Math.random() * questions.length)];
+    document.getElementById("question").textContent = currentQ.q;
+    document.getElementById("answer").value = "";
+}
+loadRandomQuestion();
+
+function checkAnswer() {
+    const userAnswer = document.getElementById("answer").value.toLowerCase().trim();
+    if (userAnswer === currentQ.a) {
+        answeredCorrect++;
+        questions = questions.filter(q => q !== currentQ);
+        document.getElementById("progress").textContent =
+            "Answered: " + answeredCorrect + " / 4";
+
+        if (answeredCorrect === 4) {
+            document.getElementById("lock").style.display = "none";
+            document.getElementById("bgm").play();
+            startHearts();
+        } else loadRandomQuestion();
+    } else {
+        alert("Mali ang sagot. Random ulit.");
+        loadRandomQuestion();
+    }
+}
+
+function openLetter() {
+    document.querySelector(".envelope").classList.add("open");
+}
+
+function startHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💗";
+        heart.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 8000);
+    }, 500);
+}
+</script>
+
+</body>
+</html>
+
+
 
 
 
