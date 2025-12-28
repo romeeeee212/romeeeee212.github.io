@@ -11,7 +11,7 @@
 
 body {
     margin: 0;
-    background: radial-gradient(circle at top, #1a0b14, #000);
+    background: radial-gradient(circle at top, #12050c, #000);
     min-height: 100vh;
     overflow: hidden;
     font-family: 'Playfair Display', serif;
@@ -26,7 +26,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 50px;
+    font-size: 40px;
+    letter-spacing: 6px;
     z-index: 100;
     animation: fadeOut 3s forwards 2s;
 }
@@ -34,54 +35,158 @@ body {
     to { opacity: 0; visibility: hidden; }
 }
 
-/* LOCK */
+/* PASSWORD */
 #lock {
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.93);
+    background: rgba(0,0,0,0.9);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 90;
 }
-
 .lock-box {
-    background: #14070d;
-    padding: 35px 40px;
-    border-radius: 20px;
     text-align: center;
-    max-width: 360px;
-    width: 90%;
-    box-shadow: 0 0 40px rgba(255,0,100,0.2);
 }
-
-.lock-box h2 {
-    font-size: 18px;
-    margin-bottom: 15px;
-}
-
 .lock-box input {
-    width: 100%;
-    padding: 12px;
-    font-size: 15px;
-    border-radius: 10px;
-    border: none;
-    outline: none;
+    padding: 10px;
+    font-size: 16px;
 }
-
 .lock-box button {
-    padding: 12px 28px;
-    margin-top: 15px;
-    border-radius: 20px;
-    border: none;
-    background: #a83c63;
-    color: white;
-    cursor: pointer;
+    padding: 10px 20px;
+    margin-left: 10px;
 }
 
-.lock-box p {
-    font-size: 12px;
-    margin-top: 10px;
+/* STARS */
+.star {
+    position: fixed;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle infinite alternate;
+}
+@keyframes twinkle {
+    from { opacity: 0.2; }
+    to { opacity: 1; }
+}
+
+/* ENVELOPE */
+.envelope {
+    width: 380px;
+    height: 240px;
+    background: #8b2f4f;
+    border-radius: 0 0 15px 15px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.7);
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: -120px;
+    width: 100%;
+    height: 120px;
+    background: #a83c63;
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    transform-origin: top;
+    transition: 1s;
+}
+
+.envelope.open::before {
+    transform: rotateX(180deg);
+}
+
+/* LETTER */
+.letter {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: 360px;
+    height: 0;
+    background: rgba(255,255,255,0.95);
+    color: #222;
+    border-radius: 10px;
+    padding: 0 25px;
+    overflow: hidden;
+    transition: 1.2s ease;
+}
+
+.envelope.open .letter {
+    height: 520px;
+    padding: 30px 25px;
+}
+
+/* GLASS CARD */
+.card {
+    max-width: 650px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(18px);
+    border-radius: 25px;
+    padding: 40px;
+    position: relative;
+    box-shadow: 0 0 60px rgba(255,0,120,0.4);
+}
+
+.card::before {
+    content: "";
+    position: absolute;
+    inset: -3px;
+    border-radius: 28px;
+    background: linear-gradient(45deg, #ff4d6d, #ffd166, #ff4d6d);
+    filter: blur(12px);
+    z-index: -1;
+    animation: neon 4s linear infinite;
+}
+@keyframes neon {
+    to { filter: hue-rotate(360deg) blur(12px); }
+}
+
+h1 {
+    text-align: center;
+    letter-spacing: 4px;
+}
+
+.heart {
+    text-align: center;
+    color: #ff4d6d;
+    font-size: 32px;
+    animation: beat 1.2s infinite;
+}
+@keyframes beat {
+    50% { transform: scale(1.4); }
+}
+
+.divider {
+    height: 2px;
+    background: linear-gradient(to right, transparent, #ff4d6d, transparent);
+    margin: 20px 0;
+}
+
+/* TEXT */
+#text {
+    line-height: 1.9;
+    white-space: pre-wrap;
+}
+
+/* PETALS */
+.petal {
+    position: fixed;
+    top: -10px;
+    font-size: 20px;
+    animation: fall linear infinite;
+}
+@keyframes fall {
+    to { transform: translateY(110vh) rotate(360deg); }
+}
+
+/* SPARKLE */
+.sparkle {
+    position: fixed;
+    pointer-events: none;
+    animation: sparkle 0.8s forwards;
+}
+@keyframes sparkle {
+    to { transform: scale(0); opacity: 0; }
 }
 
 /* CENTER */
@@ -91,82 +196,6 @@ body {
     justify-content: center;
     align-items: center;
 }
-
-/* ENVELOPE */
-.envelope {
-    width: 440px;
-    height: 270px;
-    background: linear-gradient(145deg, #8b2f4f, #6e233c);
-    border-radius: 0 0 20px 20px;
-    position: relative;
-    cursor: pointer;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.6);
-}
-
-.envelope::before {
-    content: "";
-    position: absolute;
-    top: -140px;
-    width: 100%;
-    height: 140px;
-    background: linear-gradient(145deg, #a83c63, #8b2f4f);
-    clip-path: polygon(0 100%, 50% 0, 100% 100%);
-    transform-origin: top;
-    transition: 1s;
-}
-.envelope.open::before {
-    transform: rotateX(180deg);
-}
-
-/* LETTER */
-.letter {
-    position: absolute;
-    bottom: 12px;
-    left: 12px;
-    width: calc(100% - 24px);
-    height: 0;
-    background: #fffdf8;
-    color: #222;
-    border-radius: 14px;
-    padding: 0 40px;
-    overflow-y: auto;
-    transition: 1.2s ease;
-}
-.envelope.open .letter {
-    height: 600px;
-    padding: 40px;
-}
-
-/* LETTER TEXT */
-.letter h2 {
-    text-align: center;
-    font-size: 28px;
-    margin-bottom: 25px;
-}
-
-#text {
-    font-size: 17px;
-    line-height: 1.9;
-}
-
-#text p {
-    margin-bottom: 20px;
-}
-
-/* HEARTS */
-.heart {
-    position: fixed;
-    bottom: -10px;
-    font-size: 18px;
-    animation: floatUp 8s linear infinite;
-    opacity: 0.7;
-}
-@keyframes floatUp {
-    to {
-        transform: translateY(-110vh);
-        opacity: 0;
-    }
-}
 </style>
 </head>
 
@@ -174,79 +203,100 @@ body {
 
 <div id="intro">👾</div>
 
-<!-- LOCK -->
 <div id="lock">
     <div class="lock-box">
-        <h2 id="question"></h2>
-        <input type="text" id="answer" placeholder="Type your answer">
-        <button onclick="checkAnswer()">Submit</button>
-        <p id="progress">Answered: 0 / 4</p>
+        <h2>Enter Password</h2>
+        <input type="password" id="pw">
+        <button onclick="unlock()">Open</button>
+        <p style="font-size:12px;">Hint: 1234</p>
     </div>
 </div>
 
-<!-- ENVELOPE -->
+<div class="center">
+    <div class="card">
+        <div class="envelope" onclick="openLetter()">
+            <div class="letter">
+                <h1>👾</h1>
+                <div class="heart"></div>
+                <div class="divider"></div>
+                <div id="text"></div>
+                <div class="divider"></div>
+                <div style="text-align:right;font-family:'Dancing Script',cursive;font-size:24px;">
+                    👾
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
-
-<!-- MUSIC -->
 <audio id="bgm" loop>
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-let questions = [
-    { q: "Ano ang favorite song ko?", a: "flaming hot cheetos" },
-    { q: "Kelan ako nawla?", a: "march 16 2025" },
-    { q: "Kelan ka unang nagalit sakin?", a: "december 9 2024" },
-    { q: "name na lagi ko tinatawag sau?", a: "alien" }
-];
-
-let answeredCorrect = 0;
-let currentQ;
-
-function loadRandomQuestion() {
-    currentQ = questions[Math.floor(Math.random() * questions.length)];
-    document.getElementById("question").textContent = currentQ.q;
-    document.getElementById("answer").value = "";
-}
-loadRandomQuestion();
-
-function checkAnswer() {
-    const userAnswer = document.getElementById("answer").value.toLowerCase().trim();
-    if (userAnswer === currentQ.a) {
-        answeredCorrect++;
-        questions = questions.filter(q => q !== currentQ);
-        document.getElementById("progress").textContent =
-            "Answered: " + answeredCorrect + " / 4";
-
-        if (answeredCorrect === 4) {
-            document.getElementById("lock").style.display = "none";
-            document.getElementById("bgm").play();
-            startHearts();
-        } else loadRandomQuestion();
-    } else {
-        alert("Mali ang sagot. Random ulit.");
-        loadRandomQuestion();
+/* PASSWORD */
+function unlock() {
+    if (document.getElementById("pw").value === "1234") {
+        document.getElementById("lock").style.display = "none";
+        document.getElementById("bgm").play();
     }
 }
 
+/* STARS */
+for (let i = 0; i < 150; i++) {
+    let s = document.createElement("div");
+    s.className = "star";
+    let size = Math.random()*2+1;
+    s.style.width = s.style.height = size+"px";
+    s.style.left = Math.random()*100+"vw";
+    s.style.top = Math.random()*100+"vh";
+    s.style.animationDuration = 1+Math.random()*3+"s";
+    document.body.appendChild(s);
+}
+
+/* PETALS */
+for (let i = 0; i < 30; i++) {
+    let p = document.createElement("div");
+    p.className = "petal";
+    p.innerHTML = "🌸";
+    p.style.left = Math.random()*100+"vw";
+    p.style.animationDuration = 5+Math.random()*5+"s";
+    document.body.appendChild(p);
+}
+
+/* OPEN LETTER */
 function openLetter() {
     document.querySelector(".envelope").classList.add("open");
 }
 
-function startHearts() {
-    setInterval(() => {
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        heart.textContent = "💗";
-        heart.style.left = Math.random() * 100 + "vw";
-        document.body.appendChild(heart);
-        setTimeout(() => heart.remove(), 8000);
-    }, 500);
+/* TYPING */
+const msg = `.`;
+
+let i = 0;
+function type() {
+    if (i < msg.length) {
+        document.getElementById("text").innerHTML += msg.charAt(i);
+        i++;
+        setTimeout(type, 35);
+    }
 }
+type();
+
+/* SPARKLE */
+document.addEventListener("mousemove", e => {
+    let sp = document.createElement("div");
+    sp.className = "sparkle";
+    sp.innerHTML = "✨";
+    sp.style.left = e.pageX+"px";
+    sp.style.top = e.pageY+"px";
+    document.body.appendChild(sp);
+    setTimeout(()=>sp.remove(),800);
+});
 </script>
 
 </body>
 </html>
+
 
 
 
