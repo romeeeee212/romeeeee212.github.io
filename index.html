@@ -1,2 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>👾</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display&family=Dancing+Script&display=swap" rel="stylesheet">
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: radial-gradient(circle at top, #ff6fb7, #ff3f9e);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-family: 'Playfair Display', serif;
+    color: white;
+}
+
+/* INTRO */
+#intro {
+    position: fixed;
+    inset: 0;
+    background: #ff4fa3;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 50px;
+    z-index: 100;
+    animation: fadeOut 3s forwards 2s;
+}
+@keyframes fadeOut {
+    to { opacity: 0; visibility: hidden; }
+}
+
+/* LOCK */
+#lock {
+    position: fixed;
+    inset: 0;
+    background: rgba(255, 79, 163, 0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 90;
+}
+
+.lock-box {
+    background: linear-gradient(145deg, #ff7cc4, #ff4fa3);
+    padding: 35px 40px;
+    border-radius: 22px;
+    text-align: center;
+    max-width: 360px;
+    width: 90%;
+    box-shadow: 0 20px 50px rgba(255, 79, 163, 0.5);
+}
+
+.lock-box h2 {
+    font-size: 18px;
+    margin-bottom: 15px;
+}
+
+.lock-box input {
+    width: 100%;
+    padding: 12px;
+    font-size: 15px;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+}
+
+.lock-box button {
+    padding: 12px 30px;
+    margin-top: 15px;
+    border-radius: 25px;
+    border: none;
+    background: #ff2f8e;
+    color: white;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.lock-box button:hover {
+    background: #ff1493;
+}
+
+.lock-box p {
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+/* CENTER */
+.center {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* ENVELOPE */
+.envelope {
+    width: 440px;
+    height: 260px;
+    background: linear-gradient(145deg, #ff4fa3, #ff2f8e);
+    border-radius: 0 0 22px 22px;
+    position: relative;
+    cursor: pointer;
+    box-shadow: 0 30px 70px rgba(255, 47, 142, 0.7);
+}
+
+.envelope::before {
+    content: "";
+    position: absolute;
+    top: -140px;
+    width: 100%;
+    height: 140px;
+    background: linear-gradient(145deg, #ff9bd5, #ff4fa3);
+    clip-path: polygon(0 100%, 50% 0, 100% 100%);
+    transform-origin: top;
+    transition: 1s;
+}
+
+.envelope.open::before {
+    transform: rotateX(180deg);
+}
+
+/* LETTER (PAPER — NOT PINK) */
+.letter {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    width: calc(100% - 20px);
+    height: 0;
+    background: #fffdf8; /* paper stays white */
+    color: #ff4fa3;
+    border-radius: 18px;
+    padding: 0 40px;
+    overflow-y: auto;
+    transition: 1.3s ease;
+    scroll-behavior: smooth;
+}
+
+.envelope.open .letter {
+    height: 620px;
+    padding: 50px 45px;
+}
+
+@media (max-width: 480px) {
+    .envelope {
+        width: 90%;
+    }
+    .envelope.open .letter {
+        height: 75vh;
+        padding: 35px 25px;
+    }
+}
+
+/* TEXT */
+.letter h2 {
+    text-align: center;
+    font-size: 30px;
+    margin-bottom: 30px;
+}
+
+#text p {
+    opacity: 0;
+    transform: translateY(15px);
+    animation: reveal 1.2s forwards;
+    animation-delay: var(--d);
+    line-height: 1.9;
+    font-size: 17px;
+    margin-bottom: 22px;
+}
+
+@keyframes reveal {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* SIGNATURE */
+.signature {
+    margin-top: 40px;
+    text-align: center;
+    font-family: 'Dancing Script', cursive;
+    font-size: 28px;
+    color: #ff2f8e;
+}
+
+/* HEARTS */
+.heart {
+    position: fixed;
+    bottom: -10px;
+    font-size: 18px;
+    animation: floatUp 8s linear infinite;
+    opacity: 0.8;
+    color: #ff69b4;
+}
+
+@keyframes floatUp {
+    to {
+        transform: translateY(-110vh);
+        opacity: 0;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div id="intro">👾</div>
+
+<div id="lock">
+    <div class="lock-box">
+        <h2 id="question"></h2>
+        <input type="text" id="answer" placeholder="Type your answer">
+        <button onclick="checkAnswer()">Submit</button>
+        <p id="progress">Answered: 0 / 4</p>
+    </div>
+</div>
+
+<div class="center">
+    <div class="envelope" onclick="openLetter()">
+        <div class="letter">
+            <h2>👾</h2>
+
+            <div id="text">
+    <p style="--d:0.3s">
+    Matagal kong pinag-isipan kung sasabihin ko pa ba ito, dahil alam kong bawat salitang lalabas ay may kasamang sakit. Alam kong hindi madaling basahin ang mga salitang ito, at hindi rin madaling isulat. Pero mas masakit ang manahimik at iwan ang lahat nang walang paliwanag. Mas masakit ang magkunwaring ayos lang habang unti-unti tayong nauubos. Kaya heto ako ngayon, sinusubukang maging tapat sa’yo at sa sarili ko. Hindi naging madali ang desisyong ito, at walang araw na hindi ko ito pinag-alinlangan. Hindi ito dahil wala na akong nararamdaman. Sa totoo lang, may bahagi pa rin ng puso ko na kumakapit. Ngunit alam kong mas lalo ka lang masasaktan kung mananatili pa ako. Kaya ako na mismo ang lalayo, kahit masakit at kahit ayaw ng puso ko. Mas pinili kong tapusin ito ngayon kaysa ipagpatuloy ang isang sitwasyong pareho lang tayong masasaktan sa huli. Ayokong dumating ang araw na mauwi tayo sa galit at pagsisihan. Ayokong masira ang mga alaala dahil sa mga salitang bibitawan sa sobrang sakit. Alam kong paulit-ulit mong pinili ang manatili, kahit may mga dahilan ka nang sumuko. Alam kong minahal mo ako sa paraang kaya mo, kahit may mga sandaling ikaw ang mas napapagod. At sa kabila noon, hindi ko pa rin nagawang ipagkaloob ang pagmamahal na hinahanap mo. Hindi ko nagawang suklian nang buo ang lahat ng binigay mo. Marami akong pagkukulang sa’yo, sa oras, sa atensyon, at sa paraan ng pagmamahal. May mga pagkakataong hindi ko nagawang ipaglaban kung ano ang meron tayo. At kahit gusto kong ayusin at baguhin ang lahat, kailangan kong tanggapin na hindi pa ako handang ibigay ang pagmamahal na buo at nararapat para sa’yo. Masakit aminin, pero ito ang totoo. Hindi ako ang tamang tao para sa’yo sa panahong ito. Hindi dahil hindi ka sapat, kundi dahil ako ang kulang. Sana balang araw, matagpuan mo ang taong pipiliin ka araw-araw, yung hindi mo kailangang pagdudahan ang sarili mo. Kung kailangan man nating maghiwalay ng landas ngayon, tinatanggap ko iyon kahit masakit. Sapat na sa akin na minsan, naging mahalaga tayo sa isa’t isa. Hanggang doon, sana ingatan mo ang sarili mo. Huwag mo pababayaan ang puso at ang mga pangarap mo. Alagaan mo ang ngiti mong minsan ay naging tahanan ko. Mamahalin pa rin kita mula sa malayo at sa katahimikan.
+    </p>
+</div>
+
+
+<audio id="bgm" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<script>
+let questions = [
+    { q: "Ano ang favorite song ko?", a: "flaming hot cheetos" },
+    { q: "Kelan ako nawla?", a: "march 16 2025" },
+    { q: "Kelan ka unang nagalit sakin?", a: "december 9 2024" },
+    { q: "name na lagi ko tinatawag sau?", a: "alien" }
+];
+
+let answeredCorrect = 0;
+let currentQ;
+
+function loadRandomQuestion() {
+    currentQ = questions[Math.floor(Math.random() * questions.length)];
+    document.getElementById("question").textContent = currentQ.q;
+    document.getElementById("answer").value = "";
+}
+loadRandomQuestion();
+
+function checkAnswer() {
+    const userAnswer = document.getElementById("answer").value.toLowerCase().trim();
+    if (userAnswer === currentQ.a) {
+        answeredCorrect++;
+        questions = questions.filter(q => q !== currentQ);
+        document.getElementById("progress").textContent = "Answered: " + answeredCorrect + " / 4";
+        if (answeredCorrect === 4) {
+            document.getElementById("lock").style.display = "none";
+            document.getElementById("bgm").play();
+            startHearts();
+        } else loadRandomQuestion();
+    } else {
+        alert("Mali ang sagot. Random ulit.");
+        loadRandomQuestion();
+    }
+}
+
+function openLetter() {
+    document.querySelector(".envelope").classList.add("open");
+}
+
+function startHearts() {
+    setInterval(() => {
+        const heart = document.createElement("div");
+        heart.className = "heart";
+        heart.textContent = "💗";
+        heart.style.left = Math.random() * 100 + "vw";
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 8000);
+    }, 500);
+}
+</script>
+
+</body>
+</html>
+
 
 
