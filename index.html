@@ -1,1 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Tic-Tac-Twist</title>
+<style>
+    body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to bottom, #1e1e2f, #3b3b6d);
+    color: white;
+    text-align: center;
+}
+
+h1 {
+    margin-top: 20px;
+}
+
+#status {
+    margin: 10px 0;
+    font-size: 18px;
+}
+
+.board {
+    width: 300px;
+    margin: 20px auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+}
+
+.cell {
+    width: 100px;
+    height: 100px;
+    background: #ffcc70;
+    border-radius: 12px;
+    font-size: 48px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.cell:hover {
+    background: #ffb703;
+}
+
+.buttons {
+    margin-top: 15px;
+}
+
+button {
+    padding: 10px 18px;
+    margin: 5px;
+    font-size: 14px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.spin {
+    animation: spin 0.6s;
+}
+
+@keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+.note {
+    font-size: 12px;
+    opacity: 0.8;
+    margin-top: 15px;
+}
+
+</style>
+</head>
+<body>
+
+<h1>🎮 Tic-Tac-Twist</h1>
+<p id="status">Player X's turn</p>
+
+<div class="board" id="board">
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+    <div class="cell"></div>
+</div>
+
+<div class="buttons">
+    <button onclick="spinBoard()">🔄 Spin Board</button>
+    <button onclick="bomb()">💣 Bomb</button>
+    <button onclick="resetGame()">♻ Reset</button>
+</div>
+
+<script>
+let currentPlayer = "X";
+let cells = document.querySelectorAll(".cell");
+let statusText = document.getElementById("status");
+let bombMode = false;
+
+// 💣 bombs per player
+let bombs = {
+    X: 3,
+    O: 3
+};
+
+cells.forEach(cell => {
+    cell.addEventListener("click", () => {
+
+        // 💣 Bomb mode
+        if (bombMode) {
+            cell.textContent = "";
+            bombMode = false;
+            statusText.textContent =
+                `Player ${currentPlayer}'s turn | 💣 X:${bombs.X} O:${bombs.O}`;
+            return;
+        }
+
+        if (cell.textContent === "") {
+            cell.textContent = currentPlayer;
+
+            if (checkWin()) {
+                statusText.textContent = `🎉 Player ${currentPlayer} wins!`;
+                disableBoard();
+            } else {
+                currentPlayer = currentPlayer === "X" ? "O" : "X";
+                statusText.textContent =
+                    `Player ${currentPlayer}'s turn | 💣 X:${bombs.X} O:${bombs.O}`;
+            }
+        }
+    });
+});
+
+function checkWin() {
+    const wins = [
+        [0,1,2],[3,4,5],[6,7,8],
+        [0,3,6],[1,4,7],[2,5,8],
+        [0,4,8],[2,4,6]
+    ];
+    return wins.some(combo =>
+        combo.every(i => cells[i].textContent === currentPlayer)
+    );
+}
+
+function disableBoard() {
+    cells.forEach(cell => cell.style.pointerEvents = "none");
+}
+
+function spinBoard() {
+    const board = document.getElementById("board");
+    board.classList.add("spin");
+    setTimeout(() => board.classList.remove("spin"), 600);
+}
+
+function bomb() {
+    if (bombs[currentPlayer] > 0) {
+        bombMode = true;
+        bombs[currentPlayer]--;
+        statusText.textContent =
+            `💣 Player ${currentPlayer} bomb active! | X:${bombs.X} O:${bombs.O}`;
+    } else {
+        statusText.textContent =
+            `❌ Player ${currentPlayer} has no bombs left!`;
+    }
+}
+
+function resetGame() {
+    cells.forEach(cell => {
+        cell.textContent = "";
+        cell.style.pointerEvents = "auto";
+    });
+    currentPlayer = "X";
+    bombMode = false;
+    bombs = { X: 3, O: 3 };
+    statusText.textContent =
+        "Player X's turn | 💣 X:3 O:3";
+}
+</script>
+</body>
+</html>
+
 
