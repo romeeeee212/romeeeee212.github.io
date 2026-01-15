@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
 <meta charset="UTF-8">
 <title>Tic-Tac-Twist</title>
@@ -8,7 +8,7 @@
     margin: 0;
     min-height: 100vh;
     font-family: Arial, sans-serif;
-    background: linear-gradient(to bottom, #1e1e2f, #3b3b6d);
+    background: linear-gradient(to bottom, #540863, #F875AA);
     color: white;
     text-align: center;
 }
@@ -33,11 +33,11 @@ h1 {
 .cell {
     width: 100px;
     height: 100px;
-    background: #ffcc70;
+    background: #000000;
     border-radius: 12px;
     font-size: 48px;
     font-weight: bold;
-    color: #333;
+    color: #FFAAB8;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -45,7 +45,7 @@ h1 {
 }
 
 .cell:hover {
-    background: #ffb703;
+    background: #F875AA;
 }
 
 .buttons {
@@ -76,11 +76,11 @@ button {
     margin-top: 15px;
 }
 
-</style>
+    </style>
 </head>
 <body>
 
-<h1>🎮 Tic-Tac-Twist</h1>
+<h1>Tic-Tac-Twist</h1>
 <p id="status">Player X's turn</p>
 
 <div class="board" id="board">
@@ -96,9 +96,9 @@ button {
 </div>
 
 <div class="buttons">
-    <button onclick="spinBoard()">🔄 Spin Board</button>
-    <button onclick="bomb()">💣 Bomb</button>
-    <button onclick="resetGame()">♻ Reset</button>
+    <button onclick="spinBoard()"> Spin Board</button>
+    <button onclick="bomb()"> Bomb</button>
+    <button onclick="resetGame()"> Reset</button>
 </div>
 
 <script>
@@ -187,5 +187,3 @@ function resetGame() {
 </script>
 </body>
 </html>
-
-
